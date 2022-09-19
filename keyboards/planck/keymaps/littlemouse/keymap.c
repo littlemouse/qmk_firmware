@@ -23,7 +23,8 @@ enum planck_layers {
   _LOWER, // 1
   _RAISE, // 2
   _ADJUST, // 3
-  _MOUSE // 4
+  _MOUSE, // 4
+  _NUMPAD // 5
 };
 
 enum planck_keycodes {
@@ -40,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * | Esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   A  |   S  |   D  |LT4/F |   G  |   H  |   J  |   K  |   L  |   ;  | Ent  |
+ * | Tab  |   A  |   S  |LT5/D |LT4/F |   G  |   H  |   J  |   K  |   L  |   ;  | Ent  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  | Up/Sl|  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -49,9 +50,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    KC_TAB,  KC_A,    KC_S,    KC_D, LT(4,KC_F), KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
+    KC_TAB,  KC_A,    KC_S, LT(5,KC_D),LT(4,KC_F), KC_G,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  MT(KC_SLSH,KC_UP), RSFT_T(KC_QUOT),
-    KC_MUTE, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LGUI, KC_LEFT, KC_DOWN,   KC_RGHT
+    KC_MUTE, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LGUI, KC_LEFT, KC_DOWN, KC_RGHT
 ),
 
 /* Lower
@@ -114,7 +115,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, KC_WH_U, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______
+),
+
+[_NUMPAD] = LAYOUT_planck_grid(
+    _______, _______, _______, _______, _______, _______, _______, KC_7, KC_8, KC_9, KC_SLSH, _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, KC_ASTR, _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, KC_MINS, _______,
+    _______, _______, _______, _______, _______, _______, _______, KC_0, KC_DOT, KC_EQL, KC_PLUS, _______
 )
+
 
 };
 
@@ -123,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
 //    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
 //    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-//li,
+//,
 //)
 
 
