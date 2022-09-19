@@ -24,12 +24,22 @@ enum planck_layers {
   _RAISE, // 2
   _ADJUST, // 3
   _MOUSE, // 4
-  _NUMPAD // 5
+  _NUMPAD, // 5
+  _MACROS // 6
 };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
-  BACKLIT
+  BACKLIT,
+  XC_TOG_NAV,
+  XC_TOG_INS,
+  XC_TOG_DBG,
+  XC_OPN,
+  XC_OPN_NAV,
+  XC_NXT_ED,
+  XC_PRV_ED,
+  XC_NXT_TB,
+  XC_PRV_TB
 };
 
 #define LOWER MO(_LOWER)
@@ -45,12 +55,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  | Up/Sl|  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Mute | Ctrl | Alt  | Cmd  |Lower |    Space    |Raise |  Cmd | Left | Down |Right |
+ * | MUTE | Ctrl | Alt  | Cmd  |Lower |    Space    |Raise |  Cmd | Left | Down |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    KC_TAB,  KC_A,    KC_S, LT(5,KC_D),LT(4,KC_F), KC_G,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
+    KC_TAB,  KC_A,    LT(6,KC_S), LT(5,KC_D),LT(4,KC_F), KC_G,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  MT(KC_SLSH,KC_UP), RSFT_T(KC_QUOT),
     KC_MUTE, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LGUI, KC_LEFT, KC_DOWN, KC_RGHT
 ),
@@ -122,8 +132,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, KC_ASTR, _______,
     _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, KC_MINS, _______,
     _______, _______, _______, _______, _______, _______, _______, KC_0, KC_DOT, KC_EQL, KC_PLUS, _______
-)
+),
 
+[_MACROS] = LAYOUT_planck_grid(
+    _______, _______, _______, _______, _______, _______, _______, _______,    _______,    XC_OPN,     _______,    _______,
+    _______, _______, _______, _______, _______, _______, _______, XC_TOG_NAV, XC_TOG_INS, XC_TOG_DBG, XC_OPN_NAV, _______,
+    _______, _______, _______, _______, _______, _______, _______, XC_PRV_TB,  XC_NXT_TB,    _______,  _______,    _______,
+    _______, _______, _______, _______, _______, _______, _______, _______,    _______,    XC_PRV_ED,  _______,    XC_NXT_ED
+)
 
 };
 
@@ -151,6 +167,51 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (!record->tap.count && record->event.pressed) {
           tap_code16(KC_SLSH); // Send KC_SLSH on hold
           return false;        // Return false to ignore further processing of key
+      }
+      break;
+    case XC_TOG_NAV:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI("0"));
+      }
+      break;
+    case XC_TOG_INS:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LALT("0")));
+      }
+      break;
+    case XC_TOG_DBG:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LSFT("y")));
+      }
+      break;
+    case XC_OPN:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LSFT("o")));
+      }
+      break;
+    case XC_OPN_NAV:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LSFT("j")));
+      }
+      break;
+    case XC_NXT_ED:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LCTL("`"));
+      }
+      break;
+    case XC_PRV_ED:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LCTL(SS_LSFT("`")));
+      }
+      break;
+    case XC_NXT_TB:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LSFT("]")));
+      }
+      break;
+    case XC_PRV_TB:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI(SS_LSFT("[")));
       }
       break;
     case QWERTY:
