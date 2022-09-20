@@ -1,19 +1,3 @@
-/* Copyright 2015-2021 Jack Humbert
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include QMK_KEYBOARD_H
 #include "muse.h"
 
@@ -25,12 +9,16 @@ enum planck_layers {
   _ADJUST, // 3
   _MOUSE, // 4
   _NUMPAD, // 5
-  _MACROS // 6
+  _MACROS, // 6
+  _COPYPASTE // 7
 };
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
   BACKLIT,
+  MC_CUT,
+  MC_COPY,
+  MC_PASTE,
   XC_TOG_NAV,
   XC_TOG_INS,
   XC_TOG_DBG,
@@ -53,16 +41,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Tab  |   A  |   S  |LT5/D |LT4/F |   G  |   H  |   J  |   K  |   L  |   ;  | Ent  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  | Up/Sl|  '   |
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | MUTE | Ctrl | Alt  | Cmd  |Lower |    Space    |Raise |  Cmd | Left | Down |Right |
+ * | MO7  | Ctrl | Alt  | Cmd  |Lower |    Space    |Raise | Left | Down | Up  |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_TAB,  KC_A,    LT(6,KC_S), LT(5,KC_D),LT(4,KC_F), KC_G,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  MT(KC_SLSH,KC_UP), RSFT_T(KC_QUOT),
-    KC_MUTE, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LGUI, KC_LEFT, KC_DOWN, KC_RGHT
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_QUOT),
+    MO(7), KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
 ),
 
 /* Lower
@@ -136,9 +124,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_MACROS] = LAYOUT_planck_grid(
     _______, _______, _______, _______, _______, _______, _______, _______,    _______,    XC_OPN,     _______,    _______,
-    _______, _______, _______, _______, _______, _______, _______, XC_TOG_NAV, XC_TOG_INS, XC_TOG_DBG, XC_OPN_NAV, _______,
-    _______, _______, _______, _______, _______, _______, _______, XC_PRV_TB,  XC_NXT_TB,    _______,  _______,    _______,
-    _______, _______, _______, _______, _______, _______, _______, _______,    _______,    XC_PRV_ED,  _______,    XC_NXT_ED
+    _______, _______, _______, _______, _______, _______, _______, XC_TOG_NAV, XC_TOG_DBG, XC_TOG_INS, XC_OPN_NAV, _______,
+    _______, _______, _______, _______, _______, _______, _______, XC_PRV_TB,  XC_NXT_TB,   _______,  _______,    _______,
+    _______, _______, _______, _______, _______, _______, _______, _______,    XC_PRV_ED,   _______,  _______,    XC_NXT_ED
+),
+
+[_COPYPASTE] = LAYOUT_planck_grid(
+   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+   _______, _______, MC_CUT,  MC_COPY, MC_PASTE, _______, _______, _______, _______, _______, _______, _______,
+   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
 
 };
@@ -163,10 +158,19 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case MT(KC_SLSH,KC_UP):
-      if (!record->tap.count && record->event.pressed) {
-          tap_code16(KC_SLSH); // Send KC_SLSH on hold
-          return false;        // Return false to ignore further processing of key
+    case MC_CUT:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI("x"));
+      }
+      break;
+    case MC_COPY:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI("c"));
+      }
+      break;
+    case MC_PASTE:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI("v"));
       }
       break;
     case XC_TOG_NAV:
