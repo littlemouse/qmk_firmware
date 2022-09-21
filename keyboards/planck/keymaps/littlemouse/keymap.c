@@ -19,13 +19,13 @@ enum planck_keycodes {
   MC_CUT,
   MC_COPY,
   MC_PASTE,
+  MC_ALL,
   XC_TOG_NAV,
   XC_TOG_INS,
-  XC_TOG_DBG,
-  XC_OPN,
-  XC_OPN_NAV,
-  XC_NXT_ED,
-  XC_PRV_ED,
+  XC_NXT_EDT,
+  XC_PRV_EDT,
+  XC_NXT_EDR,
+  XC_PRV_EDR,
   XC_NXT_TB,
   XC_PRV_TB
 };
@@ -39,18 +39,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Esc  |   A  |   S  |LT5/D |LT4/F |   G  |   H  |   J  |   K  |   L  |   ;  | Ent  |
+ * | Esc  |   A  |Ctl/S |Opt/D |Cmd/F |   G  |   H  |Cmd/J |Opt/K |Ctl/L |   ;  | Ent  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |  '   |
+ * | Shift|   Z  |LT6/X |LT5/C |LT4/V |   B  |   N  |   M  |   ,  |   .  |   /  |  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | MO7  | Ctrl | Alt  | Cmd  |Lower |    Space    |Raise | Left | Down | Up  |Right |
+ * | MO7  | Ctrl | Opt  | Cmd  |Lower |    Space    |Raise | Left | Down | Up   |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-    KC_ESC,  KC_A,    LT(6,KC_S), LT(5,KC_D),LT(4,KC_F), KC_G,  KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_QUOT),
-    MO(7), KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT
+    KC_TAB, KC_Q,   KC_W,        KC_E,        KC_R,        KC_T,  KC_Y,  KC_U,        KC_I,        KC_O,        KC_P,   KC_BSPC,
+    KC_ESC, KC_A,   LCTL_T(KC_S),LALT_T(KC_D),LGUI_T(KC_F),KC_G,  KC_H,  RGUI_T(KC_J),RALT_T(KC_K),RCTL_T(KC_L),KC_SCLN,KC_ENT,
+    KC_LSFT,KC_Z,   LT(6,KC_X),  LT(5,KC_C),  LT(4, KC_V), KC_B,  KC_N,  KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,RSFT_T(KC_QUOT),
+    MO(7),  KC_LCTL,KC_LALT,     KC_LGUI,     LOWER,       KC_SPC,KC_SPC,RAISE,       KC_LEFT,     KC_DOWN,     KC_UP,  KC_RGHT
 ),
 
 /* Lower
@@ -123,15 +123,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_MACROS] = LAYOUT_planck_grid(
-    _______, _______, _______, _______, _______, _______, _______, _______,    _______,    XC_OPN,     _______,    _______,
-    _______, _______, _______, _______, _______, _______, _______, XC_TOG_NAV, XC_TOG_DBG, XC_TOG_INS, XC_OPN_NAV, _______,
+    _______, _______, _______, _______, _______, _______, _______, XC_TOG_NAV, XC_TOG_INS,    _______,     _______,    _______,
+    _______, _______, _______, _______, _______, _______, _______, XC_PRV_EDT, XC_NXT_EDT, _______, _______,  _______,
     _______, _______, _______, _______, _______, _______, _______, XC_PRV_TB,  XC_NXT_TB,   _______,  _______,    _______,
-    _______, _______, _______, _______, _______, _______, _______, _______,    XC_PRV_ED,   _______,  _______,    XC_NXT_ED
+    _______, _______, _______, _______, _______, _______, _______, XC_PRV_EDR, XC_NXT_EDR,   _______,  _______,     _______
 ),
 
 [_COPYPASTE] = LAYOUT_planck_grid(
    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+   _______, MC_ALL,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
    _______, _______, MC_CUT,  MC_COPY, MC_PASTE, _______, _______, _______, _______, _______, _______, _______,
    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
@@ -173,6 +173,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
          SEND_STRING(SS_LGUI("v"));
       }
       break;
+    case MC_ALL:
+      if (record->event.pressed) {
+         SEND_STRING(SS_LGUI("a"));
+      }
+      break;
     case XC_TOG_NAV:
       if (record->event.pressed) {
          SEND_STRING(SS_LGUI("0"));
@@ -183,27 +188,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
          SEND_STRING(SS_LGUI(SS_LALT("0")));
       }
       break;
-    case XC_TOG_DBG:
+    case XC_NXT_EDT:
       if (record->event.pressed) {
-         SEND_STRING(SS_LGUI(SS_LSFT("y")));
+        register_code(KC_LGUI);
+        register_code(KC_LCTL);
+        tap_code(KC_RGHT);
+        unregister_code(KC_LGUI);
+        unregister_code(KC_LCTL);
       }
       break;
-    case XC_OPN:
+    case XC_PRV_EDT:
       if (record->event.pressed) {
-         SEND_STRING(SS_LGUI(SS_LSFT("o")));
+        register_code(KC_LGUI);
+        register_code(KC_LCTL);
+        tap_code(KC_LEFT);
+        unregister_code(KC_LGUI);
+        unregister_code(KC_LCTL);
       }
       break;
-    case XC_OPN_NAV:
-      if (record->event.pressed) {
-         SEND_STRING(SS_LGUI(SS_LSFT("j")));
-      }
-      break;
-    case XC_NXT_ED:
+    case XC_NXT_EDR:
       if (record->event.pressed) {
          SEND_STRING(SS_LCTL("`"));
       }
       break;
-    case XC_PRV_ED:
+    case XC_PRV_EDR:
       if (record->event.pressed) {
          SEND_STRING(SS_LCTL(SS_LSFT("`")));
       }
