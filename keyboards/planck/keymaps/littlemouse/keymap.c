@@ -39,18 +39,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Esc  |   A  |Ctl/S |Opt/D |Cmd/F |   G  |   H  |Cmd/J |Opt/K |Ctl/L |   ;  | Ent  |
+ * | Esc  |   A  |  S   |   D  |  F   |   G  |   H  |Cmd/J |   K  |  L   |Ctl/; | Ent  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Shift|   Z  |LT6/X |LT5/C |LT4/V |   B  |   N  |   M  |   ,  |   .  |   /  |  '   |
+ * | Shift|LT4/Z |LT5/X |   C  |LT6/V |   B  |   N  |   M  |   ,  |   .  |   /  |  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | MO7  | Ctrl | Opt  | Cmd  |Lower |    Space    |Raise | Left | Down | Up   |Right |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
-    KC_TAB, KC_Q,   KC_W,        KC_E,        KC_R,        KC_T,  KC_Y,  KC_U,        KC_I,        KC_O,        KC_P,   KC_BSPC,
-    KC_ESC, KC_A,   LCTL_T(KC_S),LALT_T(KC_D),LGUI_T(KC_F),KC_G,  KC_H,  RGUI_T(KC_J),RALT_T(KC_K),RCTL_T(KC_L),KC_SCLN,KC_ENT,
-    KC_LSFT,KC_Z,   LT(6,KC_X),  LT(5,KC_C),  LT(4, KC_V), KC_B,  KC_N,  KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,RSFT_T(KC_QUOT),
-    MO(7),  KC_LCTL,KC_LALT,     KC_LGUI,     LOWER,       KC_SPC,KC_SPC,RAISE,       KC_LEFT,     KC_DOWN,     KC_UP,  KC_RGHT
+    KC_TAB,         KC_Q,      KC_W,       KC_E,   KC_R,        KC_T,  KC_Y,  KC_U,        KC_I,    KC_O,    KC_P,           KC_BSPC,
+    KC_ESC,         KC_A,      KC_S,       KC_D,   KC_F,        KC_G,  KC_H,  RGUI_T(KC_J),KC_K,    KC_L,    RCTL_T(KC_SCLN),KC_ENT,
+    KC_LSFT,        LT(4,KC_Z),LT(5,KC_X), KC_C,   LT(6, KC_V), KC_B,  KC_N,  KC_M,        KC_COMM, KC_DOT,  KC_SLSH,        RSFT_T(KC_QUOT),
+    KC_RGUI,        KC_LCTL,   KC_LALT,    KC_LGUI,LOWER,       KC_SPC,KC_SPC,RAISE,       KC_LEFT, KC_DOWN, KC_UP,          KC_RGHT
 ),
 
 /* Lower
@@ -59,16 +59,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | | Home | End  |      |
+ * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |      | Home | End  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |      |      |      | Mute   Mute | Play | Prev | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_grid(
-    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
-    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE,
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_HOME, KC_END,  _______,
-    _______, _______, _______, _______, _______, _______, _______, _______,    KC_MNXT,    KC_VOLD, KC_VOLU, KC_MPLY
+    KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+    KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, KC_HOME, KC_END,  _______,
+    _______, _______, _______, _______, _______, KC_MUTE, KC_MUTE, KC_MPLY, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
 ),
 
 /* Raise
@@ -79,14 +79,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |Pg Up |Pg Dn |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |      |      |      | Mute   Mute | Play | Prev | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_grid(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
-    _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_1,    KC_2,    KC_3,    KC_PGDN, _______,
+    _______, _______, _______, _______, _______, KC_MUTE, KC_MUTE, KC_MPLY, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
 ),
 
 /* Adjust (Lower + Raise)
@@ -102,8 +102,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-    _______, QK_BOOT, DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, KC_BRMU, KC_BRMD, _______,
-    _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, KC_VOLU, KC_VOLD, KC_MUTE,
+    _______, QK_BOOT, DEBUG,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, KC_BRMD, KC_BRMU, _______,
+    _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  _______, KC_VOLD, KC_VOLU, KC_MUTE,
     _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 ),
