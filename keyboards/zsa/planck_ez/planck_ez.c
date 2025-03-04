@@ -146,7 +146,6 @@ void eeconfig_init_kb(void) {  // EEPROM is getting reset!
 }
 
 
-#ifdef ORYX_CONFIGURATOR
 
 #ifndef PLANCK_EZ_USER_LEDS
 
@@ -179,6 +178,9 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
         default:
             break;
     }
+#ifdef ORYX_ENABLE
+    layer_state_set_oryx(state);
+#endif
     return state;
 }
 #endif
@@ -206,7 +208,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 eeconfig_update_kb(keyboard_config.raw);
             }
             break;
-        case QK_RGB_MATRIX_TOGGLE:
+        case RGB_TOG:
             if (record->event.pressed) {
               switch (rgb_matrix_get_flags()) {
                 case LED_FLAG_ALL: {
@@ -228,7 +230,6 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
     return process_record_user(keycode, record);
 }
-#endif
 
 #ifdef AUDIO_ENABLE
 bool music_mask_kb(uint16_t keycode) {
@@ -237,7 +238,6 @@ bool music_mask_kb(uint16_t keycode) {
     case QK_TO ... QK_TO_MAX:
     case QK_MOMENTARY ... QK_MOMENTARY_MAX:
     case QK_DEF_LAYER ... QK_DEF_LAYER_MAX:
-    case QK_PERSISTENT_DEF_LAYER ... QK_PERSISTENT_DEF_LAYER_MAX:
     case QK_TOGGLE_LAYER ... QK_TOGGLE_LAYER_MAX:
     case QK_ONE_SHOT_LAYER ... QK_ONE_SHOT_LAYER_MAX:
     case QK_LAYER_TAP_TOGGLE ... QK_LAYER_TAP_TOGGLE_MAX:
